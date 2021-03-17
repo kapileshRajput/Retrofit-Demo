@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.recyclerview_row.view.*
 
 class RecyclerViewAdapter : RecyclerView.Adapter<RecyclerViewAdapter.MyViewHolder>() {
@@ -21,6 +22,7 @@ class RecyclerViewAdapter : RecyclerView.Adapter<RecyclerViewAdapter.MyViewHolde
 
         val tvTitle = itemView.tv_title
         val tvDescription = itemView.tv_description
+        val ivAvatar = itemView.iv_avatar
 
         fun bind(item: RecyclerData){
             tvTitle.text = item.name
@@ -29,6 +31,15 @@ class RecyclerViewAdapter : RecyclerView.Adapter<RecyclerViewAdapter.MyViewHolde
             }else{
                 tvDescription.text = "No description available."
             }
+
+            val url = item.owner.avatar_url
+            Glide.with(ivAvatar)
+                .load(url)
+                .circleCrop()
+                .placeholder(R.drawable.ic_launcher_background)
+                .error(R.drawable.ic_launcher_background)
+                .fallback(R.drawable.ic_launcher_background)
+                .into(ivAvatar)
         }
     }
 

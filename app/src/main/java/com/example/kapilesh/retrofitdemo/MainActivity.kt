@@ -25,20 +25,12 @@ class MainActivity : AppCompatActivity() {
             layoutManager = LinearLayoutManager(this@MainActivity)
             recyclerViewAdapter = RecyclerViewAdapter()
             adapter = recyclerViewAdapter
+
+
         }
     }
 
     fun createData(){
-       /* val items = ArrayList<RecyclerData>()
-
-        items.add(RecyclerData("Java", "ProgLang"))
-        items.add(RecyclerData("Kotlin", "ProgLang"))
-        items.add(RecyclerData("Android", "Technology"))
-        items.add(RecyclerData("Python", "ProgLang"))
-
-        recyclerViewAdapter.setListData(items)
-        recyclerViewAdapter.notifyDataSetChanged()*/
-
         val retroInstance = RetroInstance.getRetroInstance().create(RetroService::class.java)
         val call = retroInstance.getDataFromAPI("newyork")
         call.enqueue(object : retrofit2.Callback<RecyclerList> {
