@@ -3,9 +3,12 @@ package com.example.kapilesh.retrofitdemo
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.kapilesh.retrofitdemo.network.RetroInstance
 import com.example.kapilesh.retrofitdemo.network.RetroService
+import com.example.kapilesh.retrofitdemo.viewmodel.MainActivityViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 import retrofit2.Call
 import retrofit2.Response
@@ -31,20 +34,15 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun createData(){
-        val retroInstance = RetroInstance.getRetroInstance().create(RetroService::class.java)
-        val call = retroInstance.getDataFromAPI("newyork")
-        call.enqueue(object : retrofit2.Callback<RecyclerList> {
-            override fun onResponse(call: Call<RecyclerList>, response: Response<RecyclerList>) {
-                if (response.isSuccessful) {
-                    recyclerViewAdapter.setListData(response.body()?.items!!)
-                    recyclerViewAdapter.notifyDataSetChanged()
-                }
+        val viewModel = MainActivityViewModel()
+        viewModel.getRecyclerListDataObserver().observe(this, Observer<RecyclerList> {
+            if (it != null) {
+                recyclerViewAdapter.setListData(it.items)
+                recyclerViewAdapter.notifyDataSetChanged()
+            } else {
+                Toast.makeText(this, "Error getting data from api", Toast.LENGTH_SHORT).show()
             }
-
-            override fun onFailure(call: Call<RecyclerList>, t: Throwable) {
-                Toast.makeText(this@MainActivity, "something went wrong.", Toast.LENGTH_SHORT).show()
-            }
-
         })
+        viewModel.makeApiCall()
     }
 }
