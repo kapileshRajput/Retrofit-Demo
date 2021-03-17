@@ -1,5 +1,6 @@
 package com.example.kapilesh.retrofitdemo
 
+import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,7 +24,11 @@ class RecyclerViewAdapter : RecyclerView.Adapter<RecyclerViewAdapter.MyViewHolde
 
         fun bind(item: RecyclerData){
             tvTitle.text = item.name
-            tvDescription.text = item.description
+            if (!TextUtils.isEmpty(item.description)){
+                tvDescription.text = item.description
+            }else{
+                tvDescription.text = "No description available."
+            }
         }
     }
 
