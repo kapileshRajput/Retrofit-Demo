@@ -2,8 +2,13 @@ package com.example.kapilesh.retrofitdemo
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.kapilesh.retrofitdemo.network.RetroInstance
+import com.example.kapilesh.retrofitdemo.network.RetroService
 import kotlinx.android.synthetic.main.activity_main.*
+import retrofit2.Call
+import retrofit2.Response
 
 class MainActivity : AppCompatActivity() {
     lateinit var recyclerViewAdapter: RecyclerViewAdapter
@@ -24,14 +29,30 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun createData(){
-        val items = ArrayList<String>()
+       /* val items = ArrayList<RecyclerData>()
 
-        items.add("Java")
-        items.add("Kotlin")
-        items.add("Android")
-        items.add("Python")
+        items.add(RecyclerData("Java", "ProgLang"))
+        items.add(RecyclerData("Kotlin", "ProgLang"))
+        items.add(RecyclerData("Android", "Technology"))
+        items.add(RecyclerData("Python", "ProgLang"))
 
         recyclerViewAdapter.setListData(items)
-        recyclerViewAdapter.notifyDataSetChanged()
+        recyclerViewAdapter.notifyDataSetChanged()*/
+
+        val retroInstance = RetroInstance.getRetroInstance().create(RetroService::class.java)
+        val call = retroInstance.getDataFromAPI("newyork")
+        call.enqueue(object : retrofit2.Callback<RecyclerList> {
+            override fun onResponse(call: Call<RecyclerList>, response: Response<RecyclerList>) {
+                if (response.isSuccessful) {
+                    recyclerViewAdapter.setListData(response.body()?.items!!)
+                    recyclerViewAdapter.notifyDataSetChanged()
+                }
+            }
+
+            override fun onFailure(call: Call<RecyclerList>, t: Throwable) {
+                Toast.makeText(this@MainActivity, "something went wrong.", Toast.LENGTH_SHORT).show()
+            }
+
+        })
     }
 }

@@ -8,10 +8,10 @@ import kotlinx.android.synthetic.main.recyclerview_row.view.*
 
 class RecyclerViewAdapter : RecyclerView.Adapter<RecyclerViewAdapter.MyViewHolder>() {
 
-    var items = ArrayList<String>()
+    var items = ArrayList<RecyclerData>()
 
 
-    fun setListData(data: ArrayList<String>){
+    fun setListData(data:  ArrayList<RecyclerData>){
         this.items = data
     }
 
@@ -19,9 +19,11 @@ class RecyclerViewAdapter : RecyclerView.Adapter<RecyclerViewAdapter.MyViewHolde
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         val tvTitle = itemView.tv_title
+        val tvDescription = itemView.tv_description
 
-        fun bind(title: String){
-            tvTitle.text = title
+        fun bind(item: RecyclerData){
+            tvTitle.text = item.name
+            tvDescription.text = item.description
         }
     }
 
